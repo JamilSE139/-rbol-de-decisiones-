@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Árbol de Decisiones Interactivo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+            padding: 20px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .app-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .tree-container {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tree-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 2px solid #f1f1f1;
+            padding-bottom: 15px;
+        }
+
+        .tree-header h2 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .tree-header i {
+            color: #6a11cb;
+        }
+
+        .decision-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+            min-height: 350px;
+        }
+
+        .question {
+            font-size: 1.6rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2c3e50;
+            line-height: 1.4;
+            padding: 0 10px;
+        }
+
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .option-btn {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            padding: 18px 25px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .option-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(106, 17, 203, 0.4);
+        }
+
+        .option-btn:active {
+            transform: translateY(0);
+        }
+
+        .result-container {
+            text-align: center;
+            padding: 30px 20px;
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .result-container h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .result-text {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            color: #444;
+        }
+
+        .restart-btn {
+            background: linear-gradient(to right, #FF416C, #FF4B2B);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 65, 108, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 65, 108, 0.4);
+        }
+
+        .history-container {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 2px solid #f1f1f1;
+            padding-bottom: 15px;
+        }
+
+        .history-header h2 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .history-header i {
+            color: #2575fc;
+        }
+
+        .history-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            max-height: 400px;
+            padding-right: 10px;
+        }
+
+        .history-item {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 5px solid #6a11cb;
+            transition: all 0.3s ease;
+        }
+
+        .history-item:hover {
+            transform: translateX(5px);
+            background-color: #f0f2f5;
+        }
+
+        .history-question {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .history-answer {
+            color: #6a11cb;
+            font-weight: 500;
+        }
+
+        .progress-container {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: white;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #FF416C, #FF4B2B);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        footer {
+            margin-top: 40px;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .tree-container, .history-container {
+                width: 100%;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .question {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-tree"></i> Árbol de Decisiones Interactivo</h1>
+            <p class="subtitle">Toma decisiones complejas de manera guiada. Responde preguntas para llegar a la mejor solución según tus necesidades.</p>
+        </header>
+        
+        <div class="progress-container">
+            <div class="progress-text">
+                <span>Progreso</span>
+                <span id="progress-percent">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+        
+        <div class="app-container">
+            <div class="tree-container">
+                <div class="tree-header">
+                    <h2><i class="fas fa-question-circle"></i> Pregunta Actual</h2>
+                </div>
+                
+                <div class="decision-content" id="decision-content">
+                    <div class="question" id="question-text">¿Estás buscando comprar un nuevo dispositivo electrónico?</div>
+                    
+                    <div class="options-container" id="options-container">
+                        <button class="option-btn" data-next="1">
+                            <i class="fas fa-mobile-alt"></i> Sí, un teléfono
+                        </button>
+                        <button class="option-btn" data-next="2">
+                            <i class="fas fa-laptop"></i> Sí, una computadora
+                        </button>
+                        <button class="option-btn" data-next="3">
+                            <i class="fas fa-tablet-alt"></i> Sí, una tablet
+                        </button>
+                        <button class="option-btn" data-next="4">
+                            <i class="fas fa-times"></i> No, algo diferente
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="result-container" id="result-container">
+                    <h3><i class="fas fa-check-circle"></i> Recomendación Final</h3>
+                    <div class="result-text" id="result-text"></div>
+                    <button class="restart-btn" id="restart-btn">
+                        <i class="fas fa-redo"></i> Reiniciar Árbol de Decisiones
+                    </button>
+                </div>
+            </div>
+            
+            <div class="history-container">
+                <div class="history-header">
+                    <h2><i class="fas fa-history"></i> Historial de Decisiones</h2>
+                </div>
+                
+                <div class="history-list" id="history-list">
+                    <div class="history-item">
+                        <div class="history-question">Pregunta inicial:</div>
+                        <div class="history-answer">¿Estás buscando comprar un nuevo dispositivo electrónico?</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Árbol de Decisiones Interactivo &copy; 2023 | Modelo de toma de decisiones paso a paso</p>
+        </footer>
+    </div>
+
+    <script>
+        // Definición de la estructura del árbol de decisiones
+        const decisionTree = {
+            0: {
+                question: "¿Estás buscando comprar un nuevo dispositivo electrónico?",
+                options: [
+                    { text: "Sí, un teléfono", next: 1 },
+                    { text: "Sí, una computadora", next: 2 },
+                    { text: "Sí, una tablet", next: 3 },
+                    { text: "No, algo diferente", next: 4 }
+                ]
+            },
+            1: {
+                question: "¿Cuál es tu presupuesto para el teléfono?",
+                options: [
+                    { text: "Menos de $300", next: 5 },
+                    { text: "Entre $300 y $700", next: 6 },
+                    { text: "Más de $700", next: 7 }
+                ]
+            },
+            2: {
+                question: "¿Para qué usarás principalmente la computadora?",
+                options: [
+                    { text: "Trabajo/Ofimática", next: 8 },
+                    { text: "Juegos/Entretenimiento", next: 9 },
+                    { text: "Diseño/Edición", next: 10 }
+                ]
+            },
+            3: {
+                question: "¿Prefieres una tablet con sistema operativo Android o iOS?",
+                options: [
+                    { text: "Android (más personalizable)", next: 11 },
+                    { text: "iOS (más integrado con otros dispositivos Apple)", next: 12 }
+                ]
+            },
+            4: {
+                question: "¿Qué tipo de dispositivo te interesa?",
+                options: [
+                    { text: "Reloj inteligente", next: 13 },
+                    { text: "Auriculares/audífonos", next: 14 },
+                    { text: "Altavoz inteligente", next: 15 }
+                ]
+            },
+            5: {
+                result: "Te recomendamos un teléfono de gama media como el Xiaomi Redmi Note o el Samsung Galaxy A series. Ofrecen buena relación calidad-precio."
+            },
+            6: {
+                result: "Considera un Google Pixel o un iPhone de generaciones anteriores. Son excelentes opciones en este rango de precio."
+            },
+            7: {
+                result: "Si tu presupuesto es alto, los iPhone Pro o los Samsung Galaxy S Ultra son las mejores opciones del mercado."
+            },
+            8: {
+                result: "Para trabajo, te recomendamos una laptop con buen procesador y al menos 8GB de RAM. Considera modelos como Dell XPS, MacBook Air o Lenovo ThinkPad."
+            },
+            9: {
+                result: "Para juegos, necesitas una computadora con tarjeta gráfica dedicada. Considera laptops gaming como ASUS ROG, Acer Predator o una PC de escritorio personalizada."
+            },
+            10: {
+                result: "Para diseño y edición, prioriza una pantalla de alta calidad y un buen procesador. MacBook Pro, Dell XPS o Microsoft Surface Studio son excelentes opciones."
+            },
+            11: {
+                result: "Las tablets Android como Samsung Galaxy Tab S o Lenovo Tab P ofrecen gran personalización y son ideales para multimedia."
+            },
+            12: {
+                result: "iPad es la mejor opción para tablets iOS. Son perfectas si ya tienes otros dispositivos Apple y buscas una experiencia integrada."
+            },
+            13: {
+                result: "Para relojes inteligentes, Apple Watch es líder para usuarios de iPhone, mientras que Samsung Galaxy Watch es excelente para Android."
+            },
+            14: {
+                result: "Considera auriculares como Sony WH-1000XM5 para cancelación de ruido o AirPods Pro para integración con dispositivos Apple."
+            },
+            15: {
+                result: "Los altavoces inteligentes como Amazon Echo (Alexa), Google Nest o HomePod Mini son excelentes para controlar tu hogar inteligente."
+            }
+        };
+
+        // Variables del estado actual
+        let currentStep = 0;
+        let history = [
+            { question: decisionTree[0].question, answer: "Pregunta inicial" }
+        ];
+        let totalSteps = Object.keys(decisionTree).filter(key => decisionTree[key].question).length;
+
+        // Elementos del DOM
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const decisionContent = document.getElementById('decision-content');
+        const resultContainer = document.getElementById('result-container');
+        const resultText = document.getElementById('result-text');
+        const restartBtn = document.getElementById('restart-btn');
+        const historyList = document.getElementById('history-list');
+        const progressFill = document.getElementById('progress-fill');
+        const progressPercent = document.getElementById('progress-percent');
+
+        // Función para actualizar el progreso
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            progressFill.style.width = `${progress}%`;
+            progressPercent.textContent = `${Math.round(progress)}%`;
+        }
+
+        // Función para mostrar una pregunta
+        function showQuestion(stepId) {
+            currentStep = stepId;
+            const step = decisionTree[stepId];
+            
+            questionText.textContent = step.question;
+            optionsContainer.innerHTML = '';
+            
+            step.options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.innerHTML = `<i class="fas fa-arrow-circle-right"></i> ${option.text}`;
+                button.dataset.next = option.next;
+                button.addEventListener('click', () => handleOptionClick(option.next, option.text));
+                optionsContainer.appendChild(button);
+            });
+            
+            // Mostrar contenido de decisión y ocultar resultado
+            decisionContent.style.display = 'flex';
+            resultContainer.style.display = 'none';
+            
+            updateProgress();
+        }
+
+        // Función para mostrar un resultado
+        function showResult(stepId) {
+            const step = decisionTree[stepId];
+            resultText.textContent = step.result;
+            
+            // Ocultar contenido de decisión y mostrar resultado
+            decisionContent.style.display = 'none';
+            resultContainer.style.display = 'block';
+            
+            // Actualizar progreso al 100%
+            progressFill.style.width = '100%';
+            progressPercent.textContent = '100%';
+        }
+
+        // Función para manejar clic en opción
+        function handleOptionClick(nextStepId, answerText) {
+            const currentQuestion = decisionTree[currentStep].question;
+            
+            // Agregar al historial
+            history.push({
+                question: currentQuestion,
+                answer: answerText
+            });
+            
+            // Actualizar historial en la interfaz
+            updateHistory();
+            
+            // Verificar si el siguiente paso es una pregunta o un resultado
+            if (decisionTree[nextStepId].question) {
+                showQuestion(nextStepId);
+            } else {
+                showResult(nextStepId);
+            }
+        }
+
+        // Función para actualizar el historial
+        function updateHistory() {
+            historyList.innerHTML = '';
+            
+            history.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div class="history-question">${item.question}</div>
+                    <div class="history-answer">${item.answer}</div>
+                `;
+                historyList.appendChild(historyItem);
+            });
+            
+            // Desplazar hacia el último elemento
+            historyList.scrollTop = historyList.scrollHeight;
+        }
+
+        // Función para reiniciar el árbol
+        function restartTree() {
+            currentStep = 0;
+            history = [
+                { question: decisionTree[0].question, answer: "Pregunta inicial" }
+            ];
+            
+            updateHistory();
+            showQuestion(0);
+        }
+
+        // Inicializar el árbol
+        showQuestion(0);
+        
+        // Evento para el botón de reinicio
+        restartBtn.addEventListener('click', restartTree);
+    </script>
+</body>
+</html>
