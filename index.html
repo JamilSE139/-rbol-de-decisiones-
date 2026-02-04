@@ -3,93 +3,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Árbol de Decisiones Interactivo</title>
+    <title>Árbol de Decisiones Premium</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: radial-gradient(circle at top, #0c0c2e 0%, #070720 30%, #040411 100%);
             min-height: 100vh;
-            color: #333;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(120, 119, 198, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255, 119, 184, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 40% 80%, rgba(0, 150, 255, 0.1) 0%, transparent 40%);
+            z-index: -1;
+        }
+
+        .floating-elements {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(255, 119, 184, 0.1), rgba(120, 119, 198, 0.1));
+            filter: blur(20px);
+            animation: float 20s infinite linear;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 200px;
+            height: 200px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 300px;
+            height: 300px;
+            top: 60%;
+            right: 10%;
+            animation-delay: -5s;
+            animation-direction: reverse;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 10%;
+            left: 20%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, 50px) rotate(90deg); }
+            50% { transform: translate(0, 100px) rotate(180deg); }
+            75% { transform: translate(-50px, 50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
         }
 
         .container {
-            max-width: 1200px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            z-index: 1;
+            position: relative;
         }
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            position: relative;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff77b8, #7877c6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            box-shadow: 0 10px 30px rgba(255, 119, 184, 0.4);
+            animation: pulse 3s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 10px 30px rgba(255, 119, 184, 0.4); }
+            100% { transform: scale(1.05); box-shadow: 0 15px 40px rgba(255, 119, 184, 0.6); }
+        }
+
+        .logo-icon i {
+            font-size: 36px;
             color: white;
-            padding: 20px;
-            width: 100%;
         }
 
         h1 {
-            font-size: 2.8rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(to right, #ff77b8, #7877c6, #00a6ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 700px;
-            margin: 0 auto;
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
             line-height: 1.6;
+            color: #a0a0e0;
+            font-weight: 300;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            min-width: 180px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 119, 184, 0.3);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #ff77b8, #00a6ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #a0a0e0;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .app-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 30px;
+            gap: 40px;
             justify-content: center;
             width: 100%;
         }
 
         .tree-container {
-            flex: 1;
+            flex: 2;
             min-width: 300px;
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tree-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, #ff77b8, #7877c6, #00a6ff);
+            border-radius: 30px 30px 0 0;
         }
 
         .tree-header {
             text-align: center;
-            margin-bottom: 20px;
-            color: #2c3e50;
-            border-bottom: 2px solid #f1f1f1;
-            padding-bottom: 15px;
+            margin-bottom: 40px;
+            position: relative;
         }
 
         .tree-header h2 {
-            font-size: 1.8rem;
+            font-size: 2.2rem;
+            font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
+            color: white;
         }
 
         .tree-header i {
-            color: #6a11cb;
+            background: linear-gradient(45deg, #ff77b8, #7877c6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 2.5rem;
         }
 
         .decision-content {
@@ -98,199 +264,468 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px 0;
-            min-height: 350px;
+            padding: 30px 0;
+            min-height: 400px;
+        }
+
+        .question-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 50px;
         }
 
         .question {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             text-align: center;
-            margin-bottom: 40px;
-            color: #2c3e50;
+            color: white;
             line-height: 1.4;
-            padding: 0 10px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 2;
+            font-weight: 500;
+        }
+
+        .question-icon {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff77b8, #7877c6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(255, 119, 184, 0.3);
+            z-index: 3;
+            animation: rotate 10s infinite linear;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .question-icon i {
+            font-size: 24px;
+            color: white;
         }
 
         .options-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
             width: 100%;
         }
 
         .option-btn {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
-            border: none;
-            padding: 18px 25px;
-            border-radius: 12px;
-            font-size: 1.1rem;
+            padding: 25px 20px;
+            border-radius: 20px;
+            font-size: 1.2rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
-            min-width: 200px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .option-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 119, 184, 0.2), rgba(120, 119, 198, 0.2));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
         }
 
         .option-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(106, 17, 203, 0.4);
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 119, 184, 0.3);
         }
 
-        .option-btn:active {
-            transform: translateY(0);
+        .option-btn:hover::before {
+            opacity: 1;
+        }
+
+        .option-btn i {
+            font-size: 2rem;
+            background: linear-gradient(to right, #ff77b8, #7877c6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .option-btn span {
+            font-size: 1rem;
+            color: #a0a0e0;
+            font-weight: 400;
+            margin-top: 5px;
         }
 
         .result-container {
             text-align: center;
-            padding: 30px 20px;
-            background-color: #f8f9fa;
-            border-radius: 15px;
+            padding: 50px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 25px;
             margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
             display: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 166, 255, 0.05), rgba(255, 119, 184, 0.05));
+            z-index: -1;
         }
 
         .result-container h3 {
-            color: #2c3e50;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .result-container h3 i {
+            background: linear-gradient(45deg, #00a6ff, #7877c6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .result-text {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             line-height: 1.6;
-            margin-bottom: 25px;
-            color: #444;
+            margin-bottom: 40px;
+            color: #e0e0ff;
+            padding: 0 20px;
         }
 
         .restart-btn {
-            background: linear-gradient(to right, #FF416C, #FF4B2B);
+            background: linear-gradient(135deg, #ff77b8, #7877c6);
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 20px 40px;
             border-radius: 50px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(255, 65, 108, 0.3);
+            box-shadow: 0 10px 30px rgba(255, 119, 184, 0.3);
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .restart-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #7877c6, #ff77b8);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
         }
 
         .restart-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 65, 108, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 119, 184, 0.4);
+        }
+
+        .restart-btn:hover::before {
+            opacity: 1;
         }
 
         .history-container {
             flex: 1;
             min-width: 300px;
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .history-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, #00a6ff, #7877c6);
+            border-radius: 30px 30px 0 0;
         }
 
         .history-header {
             text-align: center;
-            margin-bottom: 20px;
-            color: #2c3e50;
-            border-bottom: 2px solid #f1f1f1;
-            padding-bottom: 15px;
+            margin-bottom: 40px;
         }
 
         .history-header h2 {
-            font-size: 1.8rem;
+            font-size: 2.2rem;
+            font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
+            color: white;
         }
 
         .history-header i {
-            color: #2575fc;
+            background: linear-gradient(45deg, #00a6ff, #7877c6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 2.5rem;
         }
 
         .history-list {
             flex-grow: 1;
             overflow-y: auto;
-            max-height: 400px;
-            padding-right: 10px;
+            max-height: 500px;
+            padding-right: 15px;
+        }
+
+        .history-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .history-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .history-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #ff77b8, #7877c6);
+            border-radius: 10px;
         }
 
         .history-item {
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-left: 5px solid #6a11cb;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #ff77b8;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .history-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 119, 184, 0.05), rgba(120, 119, 198, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
         }
 
         .history-item:hover {
-            transform: translateX(5px);
-            background-color: #f0f2f5;
+            transform: translateX(10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-left-color: #00a6ff;
+        }
+
+        .history-item:hover::before {
+            opacity: 1;
+        }
+
+        .history-step {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #ff77b8, #7877c6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 119, 184, 0.3);
         }
 
         .history-question {
             font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 5px;
+            color: white;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
         }
 
         .history-answer {
-            color: #6a11cb;
+            color: #a0a0e0;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .history-answer i {
+            color: #ff77b8;
+            font-size: 0.9rem;
         }
 
         .progress-container {
             width: 100%;
-            margin-top: 20px;
+            margin: 40px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
         }
 
-        .progress-text {
+        .progress-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .progress-header h3 {
+            font-size: 1.5rem;
             color: white;
-            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-header h3 i {
+            background: linear-gradient(45deg, #ff77b8, #7877c6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .progress-percent {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #ff77b8, #00a6ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .progress-bar {
-            height: 12px;
-            background-color: rgba(255, 255, 255, 0.2);
+            height: 20px;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(to right, #FF416C, #FF4B2B);
+            background: linear-gradient(90deg, #ff77b8, #7877c6, #00a6ff);
             border-radius: 10px;
             width: 0%;
-            transition: width 0.5s ease;
+            transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.4), 
+                transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         footer {
-            margin-top: 40px;
-            color: white;
+            margin-top: 60px;
             text-align: center;
-            padding: 20px;
+            padding: 30px;
+            color: #a0a0e0;
             font-size: 0.9rem;
-            opacity: 0.8;
-            width: 100%;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        @media (max-width: 768px) {
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff77b8, #7877c6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(255, 119, 184, 0.2);
+        }
+
+        .footer-icon i {
+            font-size: 20px;
+            color: white;
+        }
+
+        @media (max-width: 1200px) {
             .app-container {
                 flex-direction: column;
             }
@@ -300,26 +735,73 @@
             }
             
             h1 {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
                 font-size: 2.2rem;
             }
             
             .question {
-                font-size: 1.4rem;
+                font-size: 1.5rem;
+                padding: 20px;
+            }
+            
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-container {
+                flex-wrap: wrap;
+            }
+            
+            .stat-box {
+                min-width: 140px;
             }
         }
     </style>
 </head>
 <body>
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
     <div class="container">
         <header>
-            <h1><i class="fas fa-tree"></i> Árbol de Decisiones Interactivo</h1>
-            <p class="subtitle">Toma decisiones complejas de manera guiada. Responde preguntas para llegar a la mejor solución según tus necesidades.</p>
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-sitemap"></i>
+                    </div>
+                    <h1>Árbol de Decisiones Premium</h1>
+                </div>
+                <p class="subtitle">Toma decisiones complejas de manera guiada con nuestra interfaz avanzada. Navega por preguntas estratégicas para llegar a la solución óptima basada en inteligencia artificial.</p>
+                
+                <div class="stats-container">
+                    <div class="stat-box">
+                        <div class="stat-value" id="total-steps">12</div>
+                        <div class="stat-label">PASOS TOTALES</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="current-step">1</div>
+                        <div class="stat-label">PASO ACTUAL</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="decisions-made">0</div>
+                        <div class="stat-label">DECISIONES</div>
+                    </div>
+                </div>
+            </div>
         </header>
         
         <div class="progress-container">
-            <div class="progress-text">
-                <span>Progreso</span>
-                <span id="progress-percent">0%</span>
+            <div class="progress-header">
+                <h3><i class="fas fa-chart-line"></i> PROGRESO DE DECISIÓN</h3>
+                <div class="progress-percent" id="progress-percent">8%</div>
             </div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progress-fill"></div>
@@ -329,252 +811,228 @@
         <div class="app-container">
             <div class="tree-container">
                 <div class="tree-header">
-                    <h2><i class="fas fa-question-circle"></i> Pregunta Actual</h2>
+                    <h2><i class="fas fa-crosshairs"></i> PUNTO DE DECISIÓN</h2>
                 </div>
                 
                 <div class="decision-content" id="decision-content">
-                    <div class="question" id="question-text">¿Estás buscando comprar un nuevo dispositivo electrónico?</div>
+                    <div class="question-container">
+                        <div class="question" id="question-text">¿Qué tipo de dispositivo tecnológico estás considerando adquirir para mejorar tu productividad o entretenimiento?</div>
+                        <div class="question-icon">
+                            <i class="fas fa-question"></i>
+                        </div>
+                    </div>
                     
                     <div class="options-container" id="options-container">
                         <button class="option-btn" data-next="1">
-                            <i class="fas fa-mobile-alt"></i> Sí, un teléfono
+                            <i class="fas fa-mobile-alt"></i>
+                            <div>SMARTPHONE</div>
+                            <span>Dispositivo móvil multifuncional</span>
                         </button>
                         <button class="option-btn" data-next="2">
-                            <i class="fas fa-laptop"></i> Sí, una computadora
+                            <i class="fas fa-laptop"></i>
+                            <div>COMPUTADORA</div>
+                            <span>Equipo para trabajo o estudios</span>
                         </button>
                         <button class="option-btn" data-next="3">
-                            <i class="fas fa-tablet-alt"></i> Sí, una tablet
+                            <i class="fas fa-tablet-alt"></i>
+                            <div>TABLET</div>
+                            <span>Dispositivo intermedio portátil</span>
                         </button>
                         <button class="option-btn" data-next="4">
-                            <i class="fas fa-times"></i> No, algo diferente
+                            <i class="fas fa-headphones-alt"></i>
+                            <div>ACCESORIO</div>
+                            <span>Auriculares, relojes, etc.</span>
                         </button>
                     </div>
                 </div>
                 
                 <div class="result-container" id="result-container">
-                    <h3><i class="fas fa-check-circle"></i> Recomendación Final</h3>
+                    <h3><i class="fas fa-trophy"></i> RECOMENDACIÓN PREMIUM</h3>
                     <div class="result-text" id="result-text"></div>
                     <button class="restart-btn" id="restart-btn">
-                        <i class="fas fa-redo"></i> Reiniciar Árbol de Decisiones
+                        <i class="fas fa-redo"></i> INICIAR NUEVA DECISIÓN
                     </button>
                 </div>
             </div>
             
             <div class="history-container">
                 <div class="history-header">
-                    <h2><i class="fas fa-history"></i> Historial de Decisiones</h2>
+                    <h2><i class="fas fa-history"></i> HISTORIAL DE DECISIONES</h2>
                 </div>
                 
                 <div class="history-list" id="history-list">
                     <div class="history-item">
-                        <div class="history-question">Pregunta inicial:</div>
-                        <div class="history-answer">¿Estás buscando comprar un nuevo dispositivo electrónico?</div>
+                        <div class="history-step">1</div>
+                        <div class="history-question">¿Qué tipo de dispositivo tecnológico estás considerando adquirir para mejorar tu productividad o entretenimiento?</div>
+                        <div class="history-answer"><i class="fas fa-arrow-right"></i> Punto de inicio del análisis</div>
                     </div>
                 </div>
             </div>
         </div>
         
         <footer>
-            <p>Árbol de Decisiones Interactivo &copy; 2023 | Modelo de toma de decisiones paso a paso</p>
+            <div class="footer-content">
+                <div class="footer-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <p>Sistema de Árbol de Decisiones Premium &copy; 2023 | Toma decisiones estratégicas con tecnología avanzada</p>
+                <div class="footer-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+            </div>
         </footer>
     </div>
 
     <script>
-        // Definición de la estructura del árbol de decisiones
+        // Definición de la estructura del árbol de decisiones premium
         const decisionTree = {
             0: {
-                question: "¿Estás buscando comprar un nuevo dispositivo electrónico?",
+                question: "¿Qué tipo de dispositivo tecnológico estás considerando adquirir para mejorar tu productividad o entretenimiento?",
                 options: [
-                    { text: "Sí, un teléfono", next: 1 },
-                    { text: "Sí, una computadora", next: 2 },
-                    { text: "Sí, una tablet", next: 3 },
-                    { text: "No, algo diferente", next: 4 }
+                    { 
+                        text: "SMARTPHONE", 
+                        description: "Dispositivo móvil multifuncional",
+                        icon: "fas fa-mobile-alt",
+                        next: 1 
+                    },
+                    { 
+                        text: "COMPUTADORA", 
+                        description: "Equipo para trabajo o estudios",
+                        icon: "fas fa-laptop",
+                        next: 2 
+                    },
+                    { 
+                        text: "TABLET", 
+                        description: "Dispositivo intermedio portátil",
+                        icon: "fas fa-tablet-alt",
+                        next: 3 
+                    },
+                    { 
+                        text: "ACCESORIO", 
+                        description: "Auriculares, relojes, etc.",
+                        icon: "fas fa-headphones-alt",
+                        next: 4 
+                    }
                 ]
             },
             1: {
-                question: "¿Cuál es tu presupuesto para el teléfono?",
+                question: "¿Qué características son más importantes para ti en un smartphone?",
                 options: [
-                    { text: "Menos de $300", next: 5 },
-                    { text: "Entre $300 y $700", next: 6 },
-                    { text: "Más de $700", next: 7 }
+                    { 
+                        text: "CÁMARA AVANZADA", 
+                        description: "Fotografía y video de alta calidad",
+                        icon: "fas fa-camera",
+                        next: 5 
+                    },
+                    { 
+                        text: "ALTO RENDIMIENTO", 
+                        description: "Velocidad y capacidad de procesamiento",
+                        icon: "fas fa-tachometer-alt",
+                        next: 6 
+                    },
+                    { 
+                        text: "DISEÑO Y ESTILO", 
+                        description: "Estética premium y materiales",
+                        icon: "fas fa-gem",
+                        next: 7 
+                    },
+                    { 
+                        text: "BATERÍA DURADERA", 
+                        description: "Autonomía y carga rápida",
+                        icon: "fas fa-battery-full",
+                        next: 8 
+                    }
                 ]
             },
             2: {
-                question: "¿Para qué usarás principalmente la computadora?",
+                question: "¿Cuál será el uso principal de tu computadora?",
                 options: [
-                    { text: "Trabajo/Ofimática", next: 8 },
-                    { text: "Juegos/Entretenimiento", next: 9 },
-                    { text: "Diseño/Edición", next: 10 }
+                    { 
+                        text: "TRABAJO OFIMÁTICO", 
+                        description: "Documentos, presentaciones, correo",
+                        icon: "fas fa-briefcase",
+                        next: 9 
+                    },
+                    { 
+                        text: "DISEÑO GRÁFICO", 
+                        description: "Edición de imagen, video, 3D",
+                        icon: "fas fa-paint-brush",
+                        next: 10 
+                    },
+                    { 
+                        text: "JUEGOS Y ENTRETENIMIENTO", 
+                        description: "Videojuegos y multimedia",
+                        icon: "fas fa-gamepad",
+                        next: 11 
+                    },
+                    { 
+                        text: "PROGRAMACIÓN", 
+                        description: "Desarrollo de software",
+                        icon: "fas fa-code",
+                        next: 12 
+                    }
                 ]
             },
             3: {
-                question: "¿Prefieres una tablet con sistema operativo Android o iOS?",
+                question: "¿Qué sistema operativo prefieres para tu tablet?",
                 options: [
-                    { text: "Android (más personalizable)", next: 11 },
-                    { text: "iOS (más integrado con otros dispositivos Apple)", next: 12 }
+                    { 
+                        text: "iOS (iPadOS)", 
+                        description: "Ecosistema Apple integrado",
+                        icon: "fab fa-apple",
+                        next: 13 
+                    },
+                    { 
+                        text: "ANDROID", 
+                        description: "Personalización y versatilidad",
+                        icon: "fab fa-android",
+                        next: 14 
+                    },
+                    { 
+                        text: "WINDOWS", 
+                        description: "Compatibilidad con software PC",
+                        icon: "fab fa-windows",
+                        next: 15 
+                    }
                 ]
             },
             4: {
-                question: "¿Qué tipo de dispositivo te interesa?",
+                question: "¿Qué tipo de accesorio tecnológico necesitas?",
                 options: [
-                    { text: "Reloj inteligente", next: 13 },
-                    { text: "Auriculares/audífonos", next: 14 },
-                    { text: "Altavoz inteligente", next: 15 }
+                    { 
+                        text: "AURICULARES", 
+                        description: "Audio personal inalámbrico",
+                        icon: "fas fa-headphones",
+                        next: 16 
+                    },
+                    { 
+                        text: "RELOJ INTELIGENTE", 
+                        description: "Monitoreo y notificaciones",
+                        icon: "fas fa-clock",
+                        next: 17 
+                    },
+                    { 
+                        text: "ALTAVOCES INTELIGENTES", 
+                        description: "Asistente de voz y audio ambiental",
+                        icon: "fas fa-volume-up",
+                        next: 18 
+                    },
+                    { 
+                        text: "OTROS ACCESORIOS", 
+                        description: "Cámaras, drones, etc.",
+                        icon: "fas fa-plus-circle",
+                        next: 19 
+                    }
                 ]
             },
             5: {
-                result: "Te recomendamos un teléfono de gama media como el Xiaomi Redmi Note o el Samsung Galaxy A series. Ofrecen buena relación calidad-precio."
+                result: "🏆 RECOMENDACIÓN PREMIUM: iPhone 14 Pro Max o Samsung Galaxy S23 Ultra. Ambos ofrecen sistemas de cámara profesionales con lentes múltiples, estabilización óptica y software avanzado de procesamiento de imagen. Ideal para creadores de contenido y fotógrafos móviles."
             },
             6: {
-                result: "Considera un Google Pixel o un iPhone de generaciones anteriores. Son excelentes opciones en este rango de precio."
+                result: "🚀 RECOMENDACIÓN PREMIUM: ASUS ROG Phone 7 o iPhone 14 Pro. Estos dispositivos cuentan con los procesadores más potentes del mercado (Snapdragon 8 Gen 2 o Apple A16 Bionic), refrigeración avanzada y pantallas de alta tasa de refresco para un rendimiento excepcional."
             },
             7: {
-                result: "Si tu presupuesto es alto, los iPhone Pro o los Samsung Galaxy S Ultra son las mejores opciones del mercado."
+                result: "💎 RECOMENDACIÓN PREMIUM: Samsung Galaxy Z Flip 5 o iPhone 14 en colores exclusivos. Diseños innovadores con materiales premium como vidrio reforzado y aluminio de grado aeroespacial. Combina elegancia con funcionalidad avanzada."
             },
             8: {
-                result: "Para trabajo, te recomendamos una laptop con buen procesador y al menos 8GB de RAM. Considera modelos como Dell XPS, MacBook Air o Lenovo ThinkPad."
-            },
-            9: {
-                result: "Para juegos, necesitas una computadora con tarjeta gráfica dedicada. Considera laptops gaming como ASUS ROG, Acer Predator o una PC de escritorio personalizada."
-            },
-            10: {
-                result: "Para diseño y edición, prioriza una pantalla de alta calidad y un buen procesador. MacBook Pro, Dell XPS o Microsoft Surface Studio son excelentes opciones."
-            },
-            11: {
-                result: "Las tablets Android como Samsung Galaxy Tab S o Lenovo Tab P ofrecen gran personalización y son ideales para multimedia."
-            },
-            12: {
-                result: "iPad es la mejor opción para tablets iOS. Son perfectas si ya tienes otros dispositivos Apple y buscas una experiencia integrada."
-            },
-            13: {
-                result: "Para relojes inteligentes, Apple Watch es líder para usuarios de iPhone, mientras que Samsung Galaxy Watch es excelente para Android."
-            },
-            14: {
-                result: "Considera auriculares como Sony WH-1000XM5 para cancelación de ruido o AirPods Pro para integración con dispositivos Apple."
-            },
-            15: {
-                result: "Los altavoces inteligentes como Amazon Echo (Alexa), Google Nest o HomePod Mini son excelentes para controlar tu hogar inteligente."
-            }
-        };
-
-        // Variables del estado actual
-        let currentStep = 0;
-        let history = [
-            { question: decisionTree[0].question, answer: "Pregunta inicial" }
-        ];
-        let totalSteps = Object.keys(decisionTree).filter(key => decisionTree[key].question).length;
-
-        // Elementos del DOM
-        const questionText = document.getElementById('question-text');
-        const optionsContainer = document.getElementById('options-container');
-        const decisionContent = document.getElementById('decision-content');
-        const resultContainer = document.getElementById('result-container');
-        const resultText = document.getElementById('result-text');
-        const restartBtn = document.getElementById('restart-btn');
-        const historyList = document.getElementById('history-list');
-        const progressFill = document.getElementById('progress-fill');
-        const progressPercent = document.getElementById('progress-percent');
-
-        // Función para actualizar el progreso
-        function updateProgress() {
-            const progress = (currentStep / totalSteps) * 100;
-            progressFill.style.width = `${progress}%`;
-            progressPercent.textContent = `${Math.round(progress)}%`;
-        }
-
-        // Función para mostrar una pregunta
-        function showQuestion(stepId) {
-            currentStep = stepId;
-            const step = decisionTree[stepId];
-            
-            questionText.textContent = step.question;
-            optionsContainer.innerHTML = '';
-            
-            step.options.forEach(option => {
-                const button = document.createElement('button');
-                button.className = 'option-btn';
-                button.innerHTML = `<i class="fas fa-arrow-circle-right"></i> ${option.text}`;
-                button.dataset.next = option.next;
-                button.addEventListener('click', () => handleOptionClick(option.next, option.text));
-                optionsContainer.appendChild(button);
-            });
-            
-            // Mostrar contenido de decisión y ocultar resultado
-            decisionContent.style.display = 'flex';
-            resultContainer.style.display = 'none';
-            
-            updateProgress();
-        }
-
-        // Función para mostrar un resultado
-        function showResult(stepId) {
-            const step = decisionTree[stepId];
-            resultText.textContent = step.result;
-            
-            // Ocultar contenido de decisión y mostrar resultado
-            decisionContent.style.display = 'none';
-            resultContainer.style.display = 'block';
-            
-            // Actualizar progreso al 100%
-            progressFill.style.width = '100%';
-            progressPercent.textContent = '100%';
-        }
-
-        // Función para manejar clic en opción
-        function handleOptionClick(nextStepId, answerText) {
-            const currentQuestion = decisionTree[currentStep].question;
-            
-            // Agregar al historial
-            history.push({
-                question: currentQuestion,
-                answer: answerText
-            });
-            
-            // Actualizar historial en la interfaz
-            updateHistory();
-            
-            // Verificar si el siguiente paso es una pregunta o un resultado
-            if (decisionTree[nextStepId].question) {
-                showQuestion(nextStepId);
-            } else {
-                showResult(nextStepId);
-            }
-        }
-
-        // Función para actualizar el historial
-        function updateHistory() {
-            historyList.innerHTML = '';
-            
-            history.forEach(item => {
-                const historyItem = document.createElement('div');
-                historyItem.className = 'history-item';
-                historyItem.innerHTML = `
-                    <div class="history-question">${item.question}</div>
-                    <div class="history-answer">${item.answer}</div>
-                `;
-                historyList.appendChild(historyItem);
-            });
-            
-            // Desplazar hacia el último elemento
-            historyList.scrollTop = historyList.scrollHeight;
-        }
-
-        // Función para reiniciar el árbol
-        function restartTree() {
-            currentStep = 0;
-            history = [
-                { question: decisionTree[0].question, answer: "Pregunta inicial" }
-            ];
-            
-            updateHistory();
-            showQuestion(0);
-        }
-
-        // Inicializar el árbol
-        showQuestion(0);
-        
-        // Evento para el botón de reinicio
-        restartBtn.addEventListener('click', restartTree);
-    </script>
-</body>
-</html>
+                result: "🔋 RECOMENDACIÓN PREMIUM: Xiaomi 13 Pro o Samsung Galaxy S23+. Ofrecen baterías de 5000mAh+ con carga ultrarrápida de 120W y optimización inteligente de energía. Autonomía para más de 48 horas de uso
